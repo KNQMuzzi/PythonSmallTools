@@ -38,9 +38,16 @@ def getSteamValidatorID(baseSTR):
     return code_dict
 
 if __name__ == '__main__':
-    # str_input = input('请输入Steam验证器ID：')
+    save_path = os.path.join(os.getcwd(), "SteamValidatorID")
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
+
     dict = getSteamValidatorID(baseSTR)
-    json_name = "SteamValidatorID_" + datetime.datetime.now().strftime("%Y-%m-%d") + "_.json"
-    with open(os.path.join("D:\AxMyWorkBench\PythonProject\SmallTools\SteamValidatorID", json_name), "w") as f:
-        json.dump(dict, f, indent=4)
+    json_name = "SteamValidatorID_" + datetime.datetime.now().strftime("%Y-%m-%d") + ".json"
+
+    # create JSON file
+    dict = json.dumps(dict, indent=4)
+    file = open(os.path.join(save_path, json_name), 'w')
+    file.write(dict)
+    file.close()
     print(f"Steam验证器ID已保存至{json_name}")
