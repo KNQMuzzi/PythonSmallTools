@@ -78,6 +78,11 @@ def RT_SourceDirName(path, rename_inject = "", controller = 0):
             else:
                 print("Rename_Inject OR Filename_Contain_Rename_Inject")
 
+def RT_AddFileSizeEnd(basepath, rule = "a"):
+    # Show the base_path's DIR_List
+    pass
+
+
 if __name__ == "__main__":
     base_path = r"E:\@S\@A\@M#C#[Sirena Milano]-[4.26 GB]R"
     RT_SourceDirName(base_path)
