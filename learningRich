@@ -6,8 +6,10 @@ with Progress(TextColumn("[progress.description]{task.description}"),
             TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
             TimeRemainingColumn(),
             TimeElapsedColumn()) as progress:
+
     epoch_tqdm = progress.add_task(description="epoch progress", total=10)
     batch_tqdm = progress.add_task(description="batch progress", total=100)
+    
     for ep in range(10):
         for batch in range(100):
             print("ep: {} batch: {}".format(ep, batch))

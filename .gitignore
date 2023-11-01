@@ -1,3 +1,5 @@
 SteamValidatorID/
-# /.json
+RenameLog/
 .idea/
+/.json
+/.log
