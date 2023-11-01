@@ -27,7 +27,7 @@ class modifiledLogging:
         logger = logging.getLogger(self.logname)
         # 创建一个handler，用于写入日志文件
         filename = os.path.join(self.logpath, self.logname + '.log')
-        fh = logging.FileHandler(filename, mode='w+', encoding='utf-8')
+        fh = logging.FileHandler(filename, mode='a+', encoding='utf-8')
         ch = logging.StreamHandler()
         # 定义输出格式(可以定义多个输出格式例formatter1，formatter2)
         formatter = logging.Formatter('%(asctime)s %(message)s')
