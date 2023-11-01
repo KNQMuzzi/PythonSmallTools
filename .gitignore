@@ -1,5 +1,7 @@
 SteamValidatorID/
 RenameLog/
+__pycache__/
 .idea/
 /.json
 /.log
+/.pyc
