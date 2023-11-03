@@ -39,14 +39,12 @@ class RT:
             return False
 
     # HINT 获取文件夹的大小
-    def RT_GetDirSize(self, dir:str, sizeSetting:str = "GB") -> float:
+    def RT_GetDirSize(self, dir:str, taskID:str, sizeSetting:str = "GB") -> float:
         size = 0
-        taskName = dir.split("\\")[-1]
-        root, dirs, files = os.walk(dir).__next__()
-        taskCountSize = self.progress.add_task(description = taskName, total=len(files))
-        for name in files:
-            size += os.path.getsize(os.path.join(root, name))
-            self.progress.advance(taskCountSize, advance=1)
+        for root, dirs, files in os.walk(dir):
+            for name in files:
+                size += os.path.getsize(os.path.join(root, name))
+                self.progress.advance(taskID, advance=1)
         if sizeSetting == "GB" or "gb":
             size = size / 1024 / 1024 / 1024
         elif sizeSetting == "MB" or "mb":
@@ -60,7 +58,8 @@ class RT:
         subDirSize = {}
         for dir in os.listdir(self.filePath):
             if os.path.isdir(os.path.join(self.filePath, dir)):
-                subDirSize[dir] = f"{self.RT_GetDirSize(os.path.join(self.filePath, dir), sizeSetting):.2f} GB"
+                taskCountSize = self.progress.add_task(description = dir)
+                subDirSize[dir] = f"{self.RT_GetDirSize(os.path.join(self.filePath, dir), taskCountSize, sizeSetting):.2f} GB"
         return subDirSize
 
     # HINT 重命名文件工具
@@ -180,12 +179,12 @@ class RT:
             raise Exception("Model Name Error")
 
 if __name__ == "__main__":
-    base_path = r"D:\PicWork"
+    base_path = r"E:\@S"
     with Progress(TextColumn("[progress.description]{task.description}"),
             BarColumn(),
             TimeRemainingColumn(),
             TimeElapsedColumn()) as progress:
 
         RT = RT(progress, base_path)
-        # RT.RT_AddFileSizeEnd(base_path, "m")
+        RT.RT_AddFileSizeEnd(rule = "m")
         # RT.RT_RenameSpecificPic("Alpha")
