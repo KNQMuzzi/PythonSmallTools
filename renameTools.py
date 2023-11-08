@@ -16,11 +16,9 @@ class RT:
     def __init__(self,
                  progress:Progress,
                  filePath:str,
-                 replaceStr:str = "",
                  renameRule:str = None,) -> None:
         self.progress = progress
         self.filePath = filePath
-        self.replaceStr = replaceStr
         self.renameRule = renameRule
         self.logger = ML(r"./RenameLog", f"Renamelog-{datetime.datetime.today().strftime('%Y-%m-%d')}").MakeLogging()
 
@@ -63,7 +61,7 @@ class RT:
         return subDirSize
 
     # HINT 重命名文件工具
-    def RT_RenameFiles(self, path:str, controller:int = 0) -> None:
+    def RT_RenameFiles(self, path:str, inject:str = "", controller:int = 0) -> None:
         '''
         :description:
         :param path [*]
@@ -81,19 +79,20 @@ class RT:
             # HINT 判断是否是文件夹
             if os.path.isdir(file_path_current):
                 # HINT 如果是文件夹，递归调用，将文件夹的名字作为参数传入
+
                 self.RT_RenameFiles(file_path_current, filename, controller)
             else:
                 # HINT 判断是否是初始的调用，若运行，此时的inject是本级文件夹名字
-                if self.replaceStr != "":
+                if inject != "":
                     # HINT 新的文件名(基础)
-                    new_file_path = os.path.join(path, self.replaceStr)
+                    new_file_path = os.path.join(path, inject)
                     # HINT 扩展名
                     if os.path.splitext(filename)[1] != "":
                         file_extension = os.path.splitext(filename)[1]
                     else:
                         file_extension = ".png"
                     # HINT 判断是否包含重命名注入的分数阈值
-                    if self.RT_ContainStr(filename, self.replaceStr):
+                    if self.RT_ContainStr(filename, inject):
                         if controller == 0:
                             new_file_path = f"{file_path_current}"
                         else:
@@ -101,7 +100,7 @@ class RT:
                     elif self.RT_ContainStr("_cover", filename) == True:
                         new_file_path = f"{new_file_path}_CoverS{file_extension}"
                     # HINT 若文件太几把长，直接重新命名
-                    elif len(filename) > 80:
+                    elif len(filename) > 50:
                         new_file_path = f"{new_file_path}_File_{filenameList.index(filename):04d}{file_extension}"
                     else:
                         new_file_path = f"{new_file_path}_{filename}"
@@ -116,7 +115,7 @@ class RT:
                         else:
                             self.logger.debug("This File Is Exist")
                 else:
-                    self.logger.debug("self.replaceStr OR Filename_Contain_self.replaceStr")
+                    self.logger.debug("Inject is Empty")
 
     # HINT 重命名文件夹，增加大小在文件的末尾
     def RT_AddFileSizeEnd(self, rule = "a") -> None:
@@ -178,13 +177,17 @@ class RT:
         else:
             raise Exception("Model Name Error")
 
+    def RT_ShortTheFileName():
+        pass
+
 if __name__ == "__main__":
-    base_path = r"E:\@S"
+    base_path = r"D:\.@\@PIC\@T\@M######[Serena Wood]-[33.56 GB]"
     with Progress(TextColumn("[progress.description]{task.description}"),
             BarColumn(),
             TimeRemainingColumn(),
             TimeElapsedColumn()) as progress:
 
         RT = RT(progress, base_path)
-        RT.RT_AddFileSizeEnd(rule = "m")
+        RT.RT_RenameFiles(base_path, controller = 0)
+        # RT.RT_AddFileSizeEnd(rule = "m")
         # RT.RT_RenameSpecificPic("Alpha")
