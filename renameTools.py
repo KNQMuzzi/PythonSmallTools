@@ -61,6 +61,7 @@ class RT:
         return subDirSize
 
     # HINT 重命名文件工具
+    # TODO： 优化
     def RT_RenameFiles(self, path:str, inject:str = "", controller:int = 0) -> None:
         '''
         :description:
@@ -177,6 +178,7 @@ class RT:
         else:
             raise Exception("Model Name Error")
 
+    # TODO： 缩短文件名
     def RT_ShortTheFileName():
         pass
 
