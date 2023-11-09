@@ -15,11 +15,9 @@ from ModifiedLogging import modifiledLogging as ML
 class RT:
     def __init__(self,
                  progress:Progress,
-                 filePath:str,
-                 renameRule:str = None,) -> None:
+                 filePath:str,) -> None:
         self.progress = progress
         self.filePath = filePath
-        self.renameRule = renameRule
         self.logger = ML(r"./RenameLog", f"Renamelog-{datetime.datetime.today().strftime('%Y-%m-%d')}").MakeLogging()
 
     # HINT 用于计算并判断是否包含相似字符串
@@ -110,7 +108,7 @@ class RT:
                     if controller != -1 and controller != None:
                         if os.path.exists(new_file_path) == False and file_path_current != new_file_path:
                             os.rename(file_path_current, new_file_path)
-                            self.logger.info(f"Rename: {file_path_current} -> {new_file_path}")
+                            self.logger.info(f"Rename: \"{file_path_current}\" -> \"{new_file_path}\"")
                         elif file_path_current == new_file_path:
                             self.logger.debug("New File is the Same Name")
                         else:
@@ -178,18 +176,29 @@ class RT:
         else:
             raise Exception("Model Name Error")
 
-    # TODO： 缩短文件名
-    def RT_ShortTheFileName():
-        pass
+    # BUG: 缩短文件名
+    def RT_Short(self) -> None:
+        for root, dirs, files in os.walk(self.filePath):
+            current = root.split("\\")[-1]
+            for file in files:
+                if file.split(".")[-1] == "jpg" or "png":
+                    shortSTR = self.RT_SplitSTR(file, current)[-1]
+                    new_name = f"{file}-{shortSTR}"
+                    os.rename(os.path.join(root, file), os.path.join(root, new_name))
+                    self.logger.info(f"Rename: {file} -> {new_name}")
+
+    def RT_SplitSTR(self, target:str, pattern:str):
+        return re.split(pattern, target)
 
 if __name__ == "__main__":
-    base_path = r"D:\.@\@PIC\@T\@M######[Serena Wood]-[33.56 GB]"
+    base_path = r"D:\.@\@PIC\@T\@M#B#[Serena Wood]-[33.56 GB]@Enrich@Unique #Delete"
     with Progress(TextColumn("[progress.description]{task.description}"),
             BarColumn(),
             TimeRemainingColumn(),
             TimeElapsedColumn()) as progress:
 
         RT = RT(progress, base_path)
-        RT.RT_RenameFiles(base_path, controller = 0)
+        RT.RT_RenameFiles(base_path, controller = 1)
         # RT.RT_AddFileSizeEnd(rule = "m")
         # RT.RT_RenameSpecificPic("Alpha")
+        # RT.RT_Short()
