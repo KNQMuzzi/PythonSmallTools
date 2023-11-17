@@ -59,6 +59,15 @@ class RT:
                 subDirSize[dir] = f"{self.RT_GetDirSize(os.path.join(self.filePath, dir), taskCountSize, sizeSetting):.2f} GB"
         return subDirSize
 
+    # HINT 获取文件夹下的子文件夹的图片数量
+    def RT_SubDirPicCount(self) -> dict:
+        subDirPicCount = {}
+        for dir in os.listdir(self.filePath):
+            if os.path.isdir(os.path.join(self.filePath, dir)):
+                lens = len([i for i in os.listdir(os.path.join(self.filePath, dir)) if i.split(".")[-1] in self.picFile])
+                subDirPicCount[dir] = f"({lens}P)"
+        return subDirPicCount
+
     # HINT 重命名文件工具
     # TODO： 优化
     def RT_RenameFiles(self, path:str, inject:str = "", controller:int = 0) -> None:
@@ -157,7 +166,7 @@ class RT:
                 self.logger.info(f"Rename: {dir_name} -> {new_name}")
             else:
                 self.logger.debug(f"Same name {dir_name}")
-
+    # HINT 替换特定图片的名字（对于特定文件簇）
     def RT_RenameSpecificPic(self, model:str) -> None:
         if model == "Alpha" or "alpha" or "A" or "a":
             Key = '@WallPaperAlpha_'
@@ -177,8 +186,10 @@ class RT:
         else:
             raise Exception("Model Name Error")
 
-        def RT_AddPicFileCount(self, rule = "a") -> None:
-            pass
+        # HINT 统计文件夹下的图片数量
+        def RT_AddPicFileCount(self) -> None:
+            dirPicCount = self.RT_SubDirPicCount()
+            # HINT 重命名
 
     # BUG: 缩短文件名
     def RT_Short(self) -> None:
