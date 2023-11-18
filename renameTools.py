@@ -186,10 +186,22 @@ class RT:
         else:
             raise Exception("Model Name Error")
 
-        # HINT 统计文件夹下的图片数量
-        def RT_AddPicFileCount(self) -> None:
-            dirPicCount = self.RT_SubDirPicCount()
-            # HINT 重命名
+    # HINT 统计文件夹下的图片数量
+    # TODO: 优化(还需要添加一个是否已经含有图片数量的判断)
+    def RT_AddPicFileCount(self) -> None:
+        dirPicCount = self.RT_SubDirPicCount()
+        # HINT 重命名
+        for dir_name in os.walk(self.filePath).__next__()[1]:
+            sourceFileNamePath = os.path.join(self.filePath, dir_name)
+            new_name = f"{dir_name}{dirPicCount[dir_name]}"
+            # HINT 控制重命名的操作
+            if new_name != None:
+                newFileNamePath = os.path.join(self.filePath, new_name)
+                os.rename(sourceFileNamePath, newFileNamePath)
+            if sourceFileNamePath != newFileNamePath:
+                self.logger.info(f"Rename: {dir_name} -> {new_name}")
+            else:
+                self.logger.debug(f"Same name {dir_name}")
 
     # BUG: 缩短文件名
     def RT_Short(self) -> None:
@@ -206,14 +218,22 @@ class RT:
         return re.split(pattern, target)
 
 if __name__ == "__main__":
+
+    toggle = False
     base_path = r"D:\.@\@PIC\@T\@M#B#[Serena Wood]-[33.56 GB]@Enrich@Unique #Delete"
+    test_path = r"D:\AxMyWorkBench\PythonProject\TestData\DingTest"
+
     with Progress(TextColumn("[progress.description]{task.description}"),
             BarColumn(),
             TimeRemainingColumn(),
             TimeElapsedColumn()) as progress:
 
-        RT = RT(progress, base_path)
-        RT.RT_RenameFiles(base_path, controller = 1)
-        # RT.RT_AddFileSizeEnd(rule = "m")
-        # RT.RT_RenameSpecificPic("Alpha")
-        # RT.RT_Short()
+        if toggle:
+            RT = RT(progress, base_path)
+            RT.RT_RenameFiles(base_path, controller = 1)
+            # RT.RT_AddFileSizeEnd(rule = "m")
+            # RT.RT_RenameSpecificPic("Alpha")
+            # RT.RT_Short()
+        else:
+            test = RT(progress, test_path)
+            test.RT_AddPicFileCount()
