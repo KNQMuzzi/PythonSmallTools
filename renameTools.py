@@ -246,16 +246,14 @@ if __name__ == "__main__":
         r"E:\@T\@M#C#[许岚LAN]",
         r"E:\@T\@M#C#[玉汇]@Plump",
     ]
-
-    with Progress(TextColumn("[progress.description]{task.description}"),
-                  BarColumn(),
-                  TimeRemainingColumn(),
-                  TimeElapsedColumn()) as progress:
-
-        for path in pathList:
-            if toggle:
-                RT = RT(progress, base_path)
-                RT.RT_RenameFiles(base_path, controller=1)
-            else:
-                test = RT(progress, test_path)
-                test.RT_AddPicFileCount()
+    for path in pathList:
+        with Progress(TextColumn("[progress.description]{task.description}"),
+                    BarColumn(),
+                    TimeRemainingColumn(),
+                    TimeElapsedColumn()) as progress:
+                if toggle:
+                    newRT = RT(progress, path)
+                    newRT.RT_RenameFiles(path, controller=1)
+                else:
+                    test = RT(progress, test_path)
+                    test.RT_AddPicFileCount()
