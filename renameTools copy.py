@@ -17,13 +17,17 @@ from ModifiedLogging import modifiledLogging as ML
 
 
 class RT:
-    def __init__(self, progress: Progress) -> None:
+    def __init__(self,
+                 progress: Progress,
+                 filePath: str,) -> None:
         self.progress = progress
-        self.logger = ML(r"./RenameLog", f"Renamelog-{datetime.datetime.today().strftime('%Y-%m-%d')}").MakeLogging()
+        self.filePath = filePath
+        self.logger = ML(
+            r"./RenameLog", f"Renamelog-{datetime.datetime.today().strftime('%Y-%m-%d')}").MakeLogging()
         self.picFile = ["jpg", "png", "jpeg", "bmp", "gif", "webp", "psd", "svg", "tiff",
                         "tif", "raw", "heif", "indd", "jp2", "jxr", "hdp", "wdp", "bpg", "ico", "cur"]
 
-    # RE 用于计算并判断是否包含相似字符串
+    # HINT 用于计算并判断是否包含相似字符串
     def RT_ContainStr(self, source_str: str, target_str: str) -> bool:
         pattern = r'\s+|[_-]'
         list_base = re.split(pattern, source_str.lower())
@@ -32,7 +36,7 @@ class RT:
         for i in list_target:
             if i in list_base:
                 score += 1
-        if score / len(list_base) > 1/2:
+        if score / len(list_base) > 7/9:
             return True
         else:
             return False
@@ -43,7 +47,7 @@ class RT:
         for root, dirs, files in os.walk(dir):
             for name in files:
                 size += os.path.getsize(os.path.join(root, name))
-                self.progress.advance(taskID, advance=1)
+                self.progress.advance(taskID, advance = 1)
         if sizeSetting == "GB" or "gb":
             size = size / 1024 / 1024 / 1024
         elif sizeSetting == "MB" or "mb":
@@ -71,7 +75,8 @@ class RT:
                 subDirPicCount[dir] = f"({lens}P)"
         return subDirPicCount
 
-    # RE 重命名文件工具
+    # HINT 重命名文件工具
+    # TODO： 优化
     def RT_RenameFiles(self, path: str, inject: str = "", controller: int = 0) -> None:
         '''
         :description:
@@ -129,7 +134,7 @@ class RT:
                 else:
                     self.logger.debug("Inject is Empty")
 
-    # RE 重命名文件夹，增加大小在文件的末尾
+    # HINT 重命名文件夹，增加大小在文件的末尾
     def RT_AddFileSizeEnd(self, rule="a") -> None:
         dirSize = self.RT_SubDirSize(self.filePath)
         # HINT 重命名
@@ -169,8 +174,8 @@ class RT:
                 self.logger.info(f"Rename: {dir_name} -> {new_name}")
             else:
                 self.logger.debug(f"Same name {dir_name}")
+    # HINT 替换特定图片的名字（对于特定文件簇）
 
-    # RE 替换特定图片的名字（对于特定文件簇）
     def RT_RenameSpecificPic(self, model: str) -> None:
         if model == "Alpha" or "alpha" or "A" or "a":
             Key = '@WallPaperAlpha_'
@@ -195,7 +200,7 @@ class RT:
             raise Exception("Model Name Error")
 
     # HINT 统计文件夹下的图片数量
-    # RE: 优化(还需要添加一个是否已经含有图片数量的判断)
+    # TODO: 优化(还需要添加一个是否已经含有图片数量的判断)
     def RT_AddPicFileCount(self) -> None:
         dirPicCount = self.RT_SubDirPicCount()
         # HINT 重命名
@@ -238,12 +243,12 @@ if __name__ == "__main__":
     ]
     for path in pathList:
         with Progress(TextColumn("[progress.description]{task.description}"),
-                      BarColumn(),
-                      TimeRemainingColumn(),
-                      TimeElapsedColumn()) as progress:
-            if toggle:
-                newRT = RT(progress, path)
-                newRT.RT_RenameFiles(path, controller=1)
-            else:
-                test = RT(progress, test_path)
-                test.RT_AddPicFileCount()
+                    BarColumn(),
+                    TimeRemainingColumn(),
+                    TimeElapsedColumn()) as progress:
+                if toggle:
+                    newRT = RT(progress, path)
+                    newRT.RT_RenameFiles(path, controller=1)
+                else:
+                    test = RT(progress, test_path)
+                    test.RT_AddPicFileCount()
