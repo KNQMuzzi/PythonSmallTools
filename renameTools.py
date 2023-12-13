@@ -15,16 +15,9 @@ import datetime
 from rich.progress import Progress, TextColumn, BarColumn, TimeElapsedColumn, TimeRemainingColumn
 from ModifiedLogging import modifiledLogging as ML
 
-
-class RT:
-    def __init__(self, progress: Progress) -> None:
-        self.progress = progress
-        self.logger = ML(r"./RenameLog", f"Renamelog-{datetime.datetime.today().strftime('%Y-%m-%d')}").MakeLogging()
-        self.picFile = ["jpg", "png", "jpeg", "bmp", "gif", "webp", "psd", "svg", "tiff",
-                        "tif", "raw", "heif", "indd", "jp2", "jxr", "hdp", "wdp", "bpg", "ico", "cur"]
-
+class tools:
     # RE 用于计算并判断是否包含相似字符串
-    def RT_ContainStr(self, source_str: str, target_str: str) -> bool:
+    def ContainStr(self, source_str: str, target_str: str) -> bool:
         pattern = r'\s+|[_-]'
         list_base = re.split(pattern, source_str.lower())
         list_target = re.split(pattern, target_str.lower())
@@ -37,8 +30,8 @@ class RT:
         else:
             return False
 
-    # HINT 获取文件夹的大小
-    def RT_GetDirSize(self, dir: str, taskID: str, sizeSetting: str = "GB") -> float:
+    # DONE 获取文件夹的大小
+    def Count_DirSize(self, dir: str, taskID: str, sizeSetting: str = "GB") -> float:
         size = 0
         for root, dirs, files in os.walk(dir):
             for name in files:
@@ -52,36 +45,86 @@ class RT:
             raise Exception("SizeSetting Error Should Be GB or MB")
         return size
 
-    # HINT 获取文件夹下的子文件夹的大小
-    def RT_SubDirSize(self, sizeSetting: str = "GB") -> dict:
-        subDirSize = {}
-        for dir in os.listdir(self.filePath):
-            if os.path.isdir(os.path.join(self.filePath, dir)):
-                taskCountSize = self.progress.add_task(description=dir)
-                subDirSize[dir] = f"{self.RT_GetDirSize(os.path.join(self.filePath, dir), taskCountSize, sizeSetting):.2f} GB"
-        return subDirSize
+    # DONE 获取文件夹下的子文件夹的图片/视频数量
+    def Count_Dir_PicAndVedio(self, dir: str) -> tuple[int, int]:
+        picCount, videoCount = 0, 0
+        for root, dirs, files in os.walk(dir):
+            for file in files:
+                if file.split(".")[-1] in self.picFile:
+                    picCount += 1
+                elif file.split(".")[-1] in self.vedioFile:
+                    videoCount += 1
+        return picCount, videoCount
 
-    # HINT 获取文件夹下的子文件夹的图片数量
-    def RT_SubDirPicCount(self) -> dict:
-        subDirPicCount = {}
-        for dir in os.listdir(self.filePath):
-            if os.path.isdir(os.path.join(self.filePath, dir)):
-                lens = len([i for i in os.listdir(os.path.join(
-                    self.filePath, dir)) if i.split(".")[-1] in self.picFile])
-                subDirPicCount[dir] = f"({lens}P)"
-        return subDirPicCount
+    # DONE 获取文件夹的元信息
+    def Get_Dir_MetaInfo(self, path: str, sizeSetting: str = "GB") -> dict:
+        subDirMetaInfo = {}
+        for dir in os.listdir(path):
+            token = os.path.join(path, dir)
+            if os.path.isdir(token):
+                subdir_count_id = self.progress.add_task(description=dir)
+                pics, videos = self.Count_Dir_PicAndVedio(token)
+                video_meta = "" if (videos != 0) else f"{videos}V"
+                MetaInfo = f"{pics}P" + video_meta
+                subDirMetaInfo[dir] = f"{MetaInfo}_{self.Count_DirSize(token, subdir_count_id, sizeSetting):.2f} GB"
+        return subDirMetaInfo
+
+# RE 重做重命名工具
+class rename_tools:
+    def __init__(self, progress: Progress, filePath: str) -> None:
+        self.progress = progress
+        self.logger = ML(
+            r"./RenameLog", f"Renamelog-{datetime.datetime.today().strftime('%Y-%m-%d')}").MakeLogging()
+        self.picFile = ["jpg", "png", "jpeg", "bmp", "gif", "webp", "psd", "svg", "tiff",
+                        "tif", "raw", "heif", "indd", "jp2", "jxr", "hdp", "wdp", "bpg", "ico", "cur"]
+        self.vedioFile = ["mp4", "avi", "mov", "wmv",
+                          "flv", "f4v", "f4p", "f4a", "f4b", "rmvb"]
+        self.tools = tools()
+
+    # RE 重命名文件夹，增加元信息
+    def Add_MetaInfo(self, path: str = None, add_rule: str = "M") -> None:
+        if path == None:
+            raise Exception("Path is None")
+        dirSize = self.tools.Get_Dir_MetaInfo(path)
+
+        for dir in os.walk(path).__next__()[1]:
+            # HINT 原文件名
+            sub_dir = os.path.join(path, dir)
+            # Rename Rules
+            if add_rule == "A":
+                new_name = f"{dir}-[{dirSize[dir]}]"
+            elif add_rule == "M":
+                patten_model = r"(@M.*?\[.*?\])"
+                modelName = re.findall(patten_model, dir)
+                if len(modelName) == 0:
+                    self.logger.debug(f"Error Name: {dir}")
+                    modelName = None
+                elif len(modelName) == 1:
+                    modelName = modelName[0]
+                else:
+                    lenList = []
+                    [lenList.append(len(i)) for i in modelName]
+                    lenList = numpy.array(lenList)
+                    modelName = modelName[lenList.argmax()]
+            # HINT Find Commit
+            pattenCommitKeyWord = r"\](@.*)"
+            commit = re.findall(pattenCommitKeyWord, dir_name)
+            # HINT 控制重命名的操作
+            if modelName != None:
+                new_name = f"{modelName}-[{dirSize[dir_name]}]{commit[0] if len(commit) != 0 else ''}"
+            else:
+                new_name = None
+            # HINT 控制重命名的操作
+            if new_name != None:
+                newFileNamePath = os.path.join(self.filePath, new_name)
+                os.rename(sourceFileNamePath, newFileNamePath)
+            if sourceFileNamePath != newFileNamePath:
+                self.logger.info(f"Rename: {dir_name} -> {new_name}")
+            else:
+                self.logger.debug(f"Same name {dir_name}")
 
     # RE 重命名文件工具
     def RT_RenameFiles(self, path: str, inject: str = "", controller: int = 0) -> None:
-        '''
-        :description:
-        :param path [*]
-        :param contorller [int]
-            -1: 不重命名文件
-            0: 不重命名相似文件
-            1: 重命名相似文件
-        :return [*]
-        '''
         # HINT 读取文件夹下的文件名列表
         filenameList = os.listdir(path)
         for filename in filenameList:
@@ -129,47 +172,6 @@ class RT:
                 else:
                     self.logger.debug("Inject is Empty")
 
-    # RE 重命名文件夹，增加大小在文件的末尾
-    def RT_AddFileSizeEnd(self, rule="a") -> None:
-        dirSize = self.RT_SubDirSize(self.filePath)
-        # HINT 重命名
-        for dir_name in os.walk(self.filePath).__next__()[1]:
-            # HINT 原文件名
-            sourceFileNamePath = os.path.join(self.filePath, dir_name)
-            # HINT 修改规则
-            if rule == "a":
-                new_name = f"{dir_name}-[{dirSize[dir_name]}]"
-            if rule == "m" or "M":
-                # HINT Find Model Name
-                pattenModelNameKeyWord = r"(@M.*?\[.*?\])"
-                modelName = re.findall(pattenModelNameKeyWord, dir_name)
-                if len(modelName) == 0:
-                    self.logger.debug(f"Error Name: {dir_name}")
-                    modelName = None
-                elif len(modelName) == 1:
-                    modelName = modelName[0]
-                else:
-                    lenList = []
-                    [lenList.append(len(i)) for i in modelName]
-                    lenList = numpy.array(lenList)
-                    modelName = modelName[lenList.argmax()]
-                # HINT Find Commit
-                pattenCommitKeyWord = r"\](@.*)"
-                commit = re.findall(pattenCommitKeyWord, dir_name)
-                # HINT 控制重命名的操作
-                if modelName != None:
-                    new_name = f"{modelName}-[{dirSize[dir_name]}]{commit[0] if len(commit) != 0 else ''}"
-                else:
-                    new_name = None
-            # HINT 控制重命名的操作
-            if new_name != None:
-                newFileNamePath = os.path.join(self.filePath, new_name)
-                os.rename(sourceFileNamePath, newFileNamePath)
-            if sourceFileNamePath != newFileNamePath:
-                self.logger.info(f"Rename: {dir_name} -> {new_name}")
-            else:
-                self.logger.debug(f"Same name {dir_name}")
-
     # RE 替换特定图片的名字（对于特定文件簇）
     def RT_RenameSpecificPic(self, model: str) -> None:
         if model == "Alpha" or "alpha" or "A" or "a":
@@ -194,23 +196,6 @@ class RT:
         else:
             raise Exception("Model Name Error")
 
-    # HINT 统计文件夹下的图片数量
-    # RE: 优化(还需要添加一个是否已经含有图片数量的判断)
-    def RT_AddPicFileCount(self) -> None:
-        dirPicCount = self.RT_SubDirPicCount()
-        # HINT 重命名
-        for dir_name in os.walk(self.filePath).__next__()[1]:
-            sourceFileNamePath = os.path.join(self.filePath, dir_name)
-            new_name = f"{dir_name}{dirPicCount[dir_name]}"
-            # HINT 控制重命名的操作
-            if new_name != None:
-                newFileNamePath = os.path.join(self.filePath, new_name)
-                os.rename(sourceFileNamePath, newFileNamePath)
-            if sourceFileNamePath != newFileNamePath:
-                self.logger.info(f"Rename: {dir_name} -> {new_name}")
-            else:
-                self.logger.debug(f"Same name {dir_name}")
-
     # BUG: 缩短文件名
     def RT_Short(self) -> None:
         for root, dirs, files in os.walk(self.filePath):
@@ -222,10 +207,6 @@ class RT:
                     os.rename(os.path.join(root, file),
                               os.path.join(root, new_name))
                     self.logger.info(f"Rename: {file} -> {new_name}")
-
-    def RT_SplitSTR(self, target: str, pattern: str):
-        return re.split(pattern, target)
-
 
 if __name__ == "__main__":
 
@@ -241,9 +222,4 @@ if __name__ == "__main__":
                       BarColumn(),
                       TimeRemainingColumn(),
                       TimeElapsedColumn()) as progress:
-            if toggle:
-                newRT = RT(progress, path)
-                newRT.RT_RenameFiles(path, controller=1)
-            else:
-                test = RT(progress, test_path)
-                test.RT_AddPicFileCount()
+            renameTools = rename_tools(progress)
