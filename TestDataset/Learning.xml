@@ -2,82 +2,82 @@
 <data>
 	<NPC>
 		<character>
-		<core>
-        <id value="1160,SlaveForSale"/>
-        <pathName value="com.lilithsthrone.game.character.npc.misc.SlaveForSale"/>
-        <name nameAndrogynous="克里斯" nameFeminine="克里斯蒂" nameMasculine="克里斯托夫"/>
-        <surname value="菲利普斯"/>
-        <genericName value=""/>
-        <description value="由于某些原因，她现在是一名奴隶，只不过是其主人的财产。"/>
-        <playerKnowsName value="true"/>
-        <playerOnFirstNameTerms value="false"/>
-        <raceConcealed value="false"/>
-        <level value="1"/>
-        <ageAppearanceDifference value="0"/>
-        <ageAppearanceAbsolute value="0"/>
-        <yearOfBirth value="2017"/>
-        <monthOfBirth value="DECEMBER"/>
-        <dayOfBirth value="14"/>
-        <version value="0.4.9.9"/>
-        <history value="NPC_SLAVE"/>
-        <elemental value=""/>
-        <elementalSummoned value="false"/>
-        <combatBehaviour value="BALANCED"/>
-        <lastTimeHadSex value="-1"/>
-        <lastTimeOrgasmed value="-1"/>
-        <desiredJobs/>
-        <petNames/>
-        <personality>
-          <trait>BRAVE</trait>
-          <trait>SHY</trait>
-        </personality>
-        <sexualOrientation value="AMBIPHILIC"/>
-        <obedience value="75.0"/>
-        <genderIdentity value="F_V_B_FEMALE"/>
-        <foughtPlayerCount value="0"/>
-        <lostCombatCount value="0"/>
-        <wonCombatCount value="0"/>
-        <experience value="0"/>
-        <perkPoints value="0"/>
-        <perkCategoryPoints/>
-        <health value="121.0"/>
-        <mana value="5.0"/>
-        <areasKnownByCharacters>
-          <area type="ASS">
-            <c>PlayerCharacter</c>
-          </area>
-          <area type="ANUS">
-            <c>PlayerCharacter</c>
-          </area>
-          <area type="VAGINA">
-            <c>PlayerCharacter</c>
-          </area>
-          <area type="MOUND">
-            <c>PlayerCharacter</c>
-          </area>
-          <area type="PENIS">
-            <c>PlayerCharacter</c>
-          </area>
-          <area type="TESTICLES">
-            <c>PlayerCharacter</c>
-          </area>
-          <area type="BREASTS">
-            <c>PlayerCharacter</c>
-          </area>
-          <area type="NIPPLES">
-            <c>PlayerCharacter</c>
-          </area>
-          <area type="BREASTS_CROTCH">
-            <c>PlayerCharacter</c>
-          </area>
-          <area type="NIPPLES_CROTCH">
-            <c>PlayerCharacter</c>
-          </area>
-          <area type="EYES">
-            <c>PlayerCharacter</c>
-          </area>
-        </areasKnownByCharacters>
-      </core>
+			<core>
+				<id value="1160,SlaveForSale"/>
+				<pathName value="com.lilithsthrone.game.character.npc.misc.SlaveForSale"/>
+				<name nameAndrogynous="克里斯" nameFeminine="克里斯蒂" nameMasculine="克里斯托夫"/>
+				<surname value="菲利普斯"/>
+				<genericName value=""/>
+				<description value="由于某些原因，她现在是一名奴隶，只不过是其主人的财产。"/>
+				<playerKnowsName value="true"/>
+				<playerOnFirstNameTerms value="false"/>
+				<raceConcealed value="false"/>
+				<level value="1"/>
+				<ageAppearanceDifference value="0"/>
+				<ageAppearanceAbsolute value="0"/>
+				<yearOfBirth value="2017"/>
+				<monthOfBirth value="DECEMBER"/>
+				<dayOfBirth value="14"/>
+				<version value="0.4.9.9"/>
+				<history value="NPC_SLAVE"/>
+				<elemental value=""/>
+				<elementalSummoned value="false"/>
+				<combatBehaviour value="BALANCED"/>
+				<lastTimeHadSex value="-1"/>
+				<lastTimeOrgasmed value="-1"/>
+				<desiredJobs/>
+				<petNames/>
+				<personality>
+					<trait>BRAVE</trait>
+					<trait>SHY</trait>
+				</personality>
+				<sexualOrientation value="AMBIPHILIC"/>
+				<obedience value="75.0"/>
+				<genderIdentity value="F_V_B_FEMALE"/>
+				<foughtPlayerCount value="0"/>
+				<lostCombatCount value="0"/>
+				<wonCombatCount value="0"/>
+				<experience value="0"/>
+				<perkPoints value="0"/>
+				<perkCategoryPoints/>
+				<health value="121.0"/>
+				<mana value="5.0"/>
+				<areasKnownByCharacters>
+					<area type="ASS">
+						<c>PlayerCharacter</c>
+					</area>
+					<area type="ANUS">
+						<c>PlayerCharacter</c>
+					</area>
+					<area type="VAGINA">
+						<c>PlayerCharacter</c>
+					</area>
+					<area type="MOUND">
+						<c>PlayerCharacter</c>
+					</area>
+					<area type="PENIS">
+						<c>PlayerCharacter</c>
+					</area>
+					<area type="TESTICLES">
+						<c>PlayerCharacter</c>
+					</area>
+					<area type="BREASTS">
+						<c>PlayerCharacter</c>
+					</area>
+					<area type="NIPPLES">
+						<c>PlayerCharacter</c>
+					</area>
+					<area type="BREASTS_CROTCH">
+						<c>PlayerCharacter</c>
+					</area>
+					<area type="NIPPLES_CROTCH">
+						<c>PlayerCharacter</c>
+					</area>
+					<area type="EYES">
+						<c>PlayerCharacter</c>
+					</area>
+				</areasKnownByCharacters>
+			</core>
 			<characterRelationships>
 				<relationship character="1030,SlaveImport" value="30.0" />
 				<relationship character="-1,Brax" value="55.0" />
