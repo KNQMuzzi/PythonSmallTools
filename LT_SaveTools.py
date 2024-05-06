@@ -102,11 +102,16 @@ def edit_slave_body_parts(node_list):
             node.find("character/body/breasts").attrib["milkRegeneration"] = "500000"
             node.find("character/body/breasts").attrib["milkStorage"] = "10000"
             node.find("character/body/breasts").attrib["storedMilk"] = "10000.0"
-            # Mouth Part <mouthcapacity="0.0"depth="7"elasticity="7"lipSize="3"piercedLip="false"plasticity="0"stretchedCapacity="0.0"virgin="false"wetness="7"><mod>MUSCLE_CONTROL</mod><mod>PUFFY</mod><mod>RIBBED</mod><mod>TENTACLED</mod></mouth>
+            node.find("character/body/breastsCrotch").attrib["milkRegeneration"] = "500000"
+            node.find("character/body/breastsCrotch").attrib["milkStorage"] = "10000"
+            node.find("character/body/breastsCrotch").attrib["storedMilk"] = "10000.0"
+            # Mouth Part
             body_part.remove(body_part.find("mouth"))
             mouth_node = ET.fromstring("""<mouth capacity="0.0" depth="7" elasticity="7" lipSize="3" piercedLip="false" plasticity="0" stretchedCapacity="0.0" virgin="false" wetness="7"><mod>MUSCLE_CONTROL</mod><mod>PUFFY</mod><mod>RIBBED</mod><mod>TENTACLED</mod></mouth>""")
             body_part.append(mouth_node)
-
+            # penis Part
+            node.find("character/body/penis").attrib["type"] = "NONE"
+            node.find("character/body/penis").attrib["size"] = "0"
             # Vagina Part
             node.find("character/body/vagina").attrib["capacity"] = "0.0"
             node.find("character/body/vagina").attrib["depth"] = "7"
@@ -119,16 +124,93 @@ def edit_slave_body_parts(node_list):
             if len(vagina_mod_list)>0:
                 for v_mod in vagina_mod_list:
                     node.find("character/body/vagina").remove(v_mod)
-            # <mod>MUSCLE_CONTROL</mod> <mod>PUFFY</mod> <mod>RIBBED</mod> <mod>TENTACLED</mod>
             vagina_part = node.find("character/body/vagina")
             vagina_part.append(create_node("mod", "MUSCLE_CONTROL"))
             vagina_part.append(create_node("mod", "PUFFY"))
             vagina_part.append(create_node("mod", "RIBBED"))
             vagina_part.append(create_node("mod", "TENTACLED"))
+            # Milk Part
+            milk_part = node.find("character/body/milk")
+            milk_part.attrib["flavour"] = "MILK"
+            milkCrotch_part = node.find("character/body/milkCrotch")
+            milkCrotch_part.attrib["flavour"] = "MILK"
+            milk_mod_list = milk_part.findall("mod")
+            if milk_mod_list is not None:
+                for milk_mod in milk_mod_list:
+                    milk_part.remove(milk_mod)
+            milkCrotch_mod_list = milkCrotch_part.findall("mod")
+            if milkCrotch_mod_list is not None:
+                for milkCrotch_mod in milkCrotch_mod_list:
+                    milkCrotch_part.remove(milkCrotch_mod)
+            milk_part.append(create_node("mod", "SLIMY"))
+            milk_part.append(create_node("mod", "MUSKY"))
+            milk_part.append(create_node("mod", "STICKY"))
+            milkCrotch_part.append(create_node("mod", "SLIMY"))
+            milkCrotch_part.append(create_node("mod", "MUSKY"))
+            milkCrotch_part.append(create_node("mod", "STICKY"))
+            # girlcum Part
+            girlcum_part = node.find("character/body/girlcum")
+            girlcum_part.attrib["flavour"] = "GIRL_CUM"
+            girlcum_mod_list = girlcum_part.findall("mod")
+            if girlcum_mod_list is not None:
+                for girlcum_mod in girlcum_mod_list:
+                    girlcum_mod_list.remove(girlcum_mod)
+            girlcum_part.append(create_node("mod", "SLIMY"))
+            girlcum_part.append(create_node("mod", "MUSKY"))
+            # pierced part
+            node.find("character/body/nipples").attrib["pierced"] = "true"
+            node.find("character/body/ear").attrib["pierced"] = "true"
+            node.find("character/body/nipplesCrotch").attrib["pierced"] = "true"
+            node.find("character/body/vagina").attrib["pierced"] = "true"
+            node.find("character/body/tongue").attrib["piercedTongue"] = "true"
 
             edit_count += 1
     print(f"Body Setting {edit_count} Changed")
 
+# HINT 更改称谓 <fatherName value="乔茜"/>  <petNames><petNameEntry id="PlayerCharacter" petName="妈妈主人"/></petNames>
+def edit_pet_name(node_list):
+    edit_count = 0
+    for node in node_list:
+        if node.find("character/slavery/owner").attrib["value"] == "PlayerCharacter":
+            if node.find("character/family/fatherId").attrib["value"] == "PlayerCharacter":
+                for petNameEntry in node.findall("character/core/petNames/petNameEntry"):
+                    if petNameEntry.attrib["id"] == "PlayerCharacter":
+                        petNameEntry.attrib["petName"] = "妈妈"
+                        edit_count += 1
+                        break
+            else:
+                for petNameEntry in node.findall("character/core/petNames/petNameEntry"):
+                    if petNameEntry.attrib["id"] == "PlayerCharacter":
+                        petNameEntry.attrib["petName"] = "主人"
+                        edit_count += 1
+                        break
+
+    print(f"Pet Name Setting {edit_count} Changed")
+
+# HINT 变更法术
+def edit_spell(node_list):
+    edit_count = 0
+    for node in node_list:
+        if node.find("character/slavery/owner").attrib["value"] == "PlayerCharacter":
+            knownSpells = node.find("character/knownSpells")
+            if knownSpells is not None:
+                node.find("character").remove(knownSpells)
+
+            new_spells = ET.fromstring("""<knownSpells>    <spell type="ARCANE_AROUSAL"/>    <spell type="TELEPATHIC_COMMUNICATION"/>    <spell type="FIREBALL"/>    <spell type="ARCANE_CLOUD"/>    <spell type="FLASH"/>    <spell type="SOOTHING_WATERS"/>    <spell type="ELEMENTAL_ARCANE"/>    <spell type="CLOAK_OF_FLAMES"/>    <spell type="STONE_SHELL"/>    <spell type="ELEMENTAL_EARTH"/>    <spell type="TELEKENETIC_SHOWER"/>    <spell type="ELEMENTAL_FIRE"/></knownSpells>""")
+            node.append(new_spells)
+
+            spellUpgrades = node.find("character/spellUpgrades")
+            if spellUpgrades is not None:
+                node.find("character").remove(spellUpgrades)
+            new_SU = ET.fromstring("""<spellUpgrades>    <upgrade type="FIREBALL_1"/>    <upgrade type="FIREBALL_2"/>    <upgrade type="FIREBALL_3"/>    <upgrade type="FLASH_1"/>    <upgrade type="FLASH_2"/>    <upgrade type="FLASH_3"/>    <upgrade type="CLOAK_OF_FLAMES_1"/>    <upgrade type="CLOAK_OF_FLAMES_2"/>    <upgrade type="CLOAK_OF_FLAMES_3"/>    <upgrade type="ELEMENTAL_FIRE_1"/>    <upgrade type="ELEMENTAL_FIRE_2"/>    <upgrade type="ELEMENTAL_FIRE_3B"/>    <upgrade type="SOOTHING_WATERS_1_CLEAN"/>    <upgrade type="SOOTHING_WATERS_2_CLEAN"/>    <upgrade type="SOOTHING_WATERS_1"/>    <upgrade type="SOOTHING_WATERS_2"/>    <upgrade type="SOOTHING_WATERS_3"/>    <upgrade type="TELEKENETIC_SHOWER_1"/>    <upgrade type="TELEKENETIC_SHOWER_2"/>    <upgrade type="TELEKENETIC_SHOWER_3"/>    <upgrade type="STONE_SHELL_1"/>    <upgrade type="STONE_SHELL_2"/>    <upgrade type="STONE_SHELL_3"/>    <upgrade type="ELEMENTAL_EARTH_1"/>    <upgrade type="ELEMENTAL_EARTH_2"/>    <upgrade type="ELEMENTAL_EARTH_3B"/>    <upgrade type="ARCANE_AROUSAL_1"/>    <upgrade type="ARCANE_AROUSAL_2"/>    <upgrade type="ARCANE_AROUSAL_3"/>    <upgrade type="TELEPATHIC_COMMUNICATION_1"/>    <upgrade type="TELEPATHIC_COMMUNICATION_2"/>    <upgrade type="TELEPATHIC_COMMUNICATION_3"/>    <upgrade type="ARCANE_CLOUD_1"/>    <upgrade type="ARCANE_CLOUD_2"/>    <upgrade type="ARCANE_CLOUD_3"/>    <upgrade type="ELEMENTAL_ARCANE_1"/>    <upgrade type="ELEMENTAL_ARCANE_2"/>    <upgrade type="ELEMENTAL_ARCANE_3B"/></spellUpgrades>""")
+            node.append(new_SU)
+
+            edit_count += 1
+    print(f"Spell Setting {edit_count} Changed")
+
+# HINT 刺青编辑
+def edit_tattoo(node_list):
+    edit_count = 0
 
 if __name__ == "__main__":
 
@@ -143,6 +225,8 @@ if __name__ == "__main__":
     edit_slave_permission_settings(npc_list)
     edit_slave_obedience_(npc_list)
     edit_slave_body_parts(npc_list)
+    edit_pet_name(npc_list)
+    edit_spell(npc_list)
 
     tree.write(xml_path, encoding="utf-8", xml_declaration=True)
     print("XML saved")
