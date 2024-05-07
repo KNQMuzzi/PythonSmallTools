@@ -197,20 +197,28 @@ def edit_spell(node_list):
                 node.find("character").remove(knownSpells)
 
             new_spells = ET.fromstring("""<knownSpells>    <spell type="ARCANE_AROUSAL"/>    <spell type="TELEPATHIC_COMMUNICATION"/>    <spell type="FIREBALL"/>    <spell type="ARCANE_CLOUD"/>    <spell type="FLASH"/>    <spell type="SOOTHING_WATERS"/>    <spell type="ELEMENTAL_ARCANE"/>    <spell type="CLOAK_OF_FLAMES"/>    <spell type="STONE_SHELL"/>    <spell type="ELEMENTAL_EARTH"/>    <spell type="TELEKENETIC_SHOWER"/>    <spell type="ELEMENTAL_FIRE"/></knownSpells>""")
-            node.append(new_spells)
+            node.find("character").append(new_spells)
 
             spellUpgrades = node.find("character/spellUpgrades")
             if spellUpgrades is not None:
                 node.find("character").remove(spellUpgrades)
             new_SU = ET.fromstring("""<spellUpgrades>    <upgrade type="FIREBALL_1"/>    <upgrade type="FIREBALL_2"/>    <upgrade type="FIREBALL_3"/>    <upgrade type="FLASH_1"/>    <upgrade type="FLASH_2"/>    <upgrade type="FLASH_3"/>    <upgrade type="CLOAK_OF_FLAMES_1"/>    <upgrade type="CLOAK_OF_FLAMES_2"/>    <upgrade type="CLOAK_OF_FLAMES_3"/>    <upgrade type="ELEMENTAL_FIRE_1"/>    <upgrade type="ELEMENTAL_FIRE_2"/>    <upgrade type="ELEMENTAL_FIRE_3B"/>    <upgrade type="SOOTHING_WATERS_1_CLEAN"/>    <upgrade type="SOOTHING_WATERS_2_CLEAN"/>    <upgrade type="SOOTHING_WATERS_1"/>    <upgrade type="SOOTHING_WATERS_2"/>    <upgrade type="SOOTHING_WATERS_3"/>    <upgrade type="TELEKENETIC_SHOWER_1"/>    <upgrade type="TELEKENETIC_SHOWER_2"/>    <upgrade type="TELEKENETIC_SHOWER_3"/>    <upgrade type="STONE_SHELL_1"/>    <upgrade type="STONE_SHELL_2"/>    <upgrade type="STONE_SHELL_3"/>    <upgrade type="ELEMENTAL_EARTH_1"/>    <upgrade type="ELEMENTAL_EARTH_2"/>    <upgrade type="ELEMENTAL_EARTH_3B"/>    <upgrade type="ARCANE_AROUSAL_1"/>    <upgrade type="ARCANE_AROUSAL_2"/>    <upgrade type="ARCANE_AROUSAL_3"/>    <upgrade type="TELEPATHIC_COMMUNICATION_1"/>    <upgrade type="TELEPATHIC_COMMUNICATION_2"/>    <upgrade type="TELEPATHIC_COMMUNICATION_3"/>    <upgrade type="ARCANE_CLOUD_1"/>    <upgrade type="ARCANE_CLOUD_2"/>    <upgrade type="ARCANE_CLOUD_3"/>    <upgrade type="ELEMENTAL_ARCANE_1"/>    <upgrade type="ELEMENTAL_ARCANE_2"/>    <upgrade type="ELEMENTAL_ARCANE_3B"/></spellUpgrades>""")
-            node.append(new_SU)
-
+            node.find("character").append(new_SU)
             edit_count += 1
     print(f"Spell Setting {edit_count} Changed")
 
 # HINT 刺青编辑
 def edit_tattoo(node_list):
     edit_count = 0
+    for node in node_list:
+        if node.find("character/slavery/owner").attrib["value"] == "PlayerCharacter":
+            tattoos = node.find("character/tattoos")
+            if tattoos is not None:
+                node.find("character").remove(tattoos)
+            new_tattoos = ET.fromstring("""<tattoos>    <tattooEntry slot="ANUS">        <tattoo glowing="true" id="innoxia_hearts_hearts" name="心形" primaryColour="CLOTHING_PURPLE_ROYAL" secondaryColour="CLOTHING_PURPLE_ROYAL">            <tattooWriting colour="CLOTHING_PURPLE_ROYAL" glow="true"><![CDATA[内射我吧！]]>                <styles>                    <style value="ITALICISED"/>                    <style value="BOLD"/>                </styles>            </tattooWriting>            <tattooCounter colour="CLOTHING_PURPLE_ROYAL" countType="NUMBERS" glow="true" type="CUM_TAKEN"/>            <effects/>        </tattoo>    </tattooEntry>    <tattooEntry slot="GROIN">        <tattoo glowing="true" id="innoxia_heartWomb_heart_womb" name="胎胞爱心" primaryColour="CLOTHING_PINK_HOT" secondaryColour="CLOTHING_PINK" tertiaryColour="CLOTHING_PINK_HOT">            <tattooWriting colour="CLOTHING_PINK" glow="true"><![CDATA[精液厕所]]>                <styles>                    <style value="ITALICISED"/>                    <style value="BOLD"/>                </styles>            </tattooWriting>            <tattooCounter colour="CLOTHING_PINK" countType="NUMBERS" glow="true" type="CUM_IN_VAGINA"/>            <effects/>        </tattoo>    </tattooEntry>    <tattooEntry slot="CHEST">        <tattoo glowing="true" id="innoxia_animal_butterflies" name="蝴蝶" primaryColour="CLOTHING_PURPLE_ROYAL" secondaryColour="CLOTHING_RED_VERY_DARK" tertiaryColour="CLOTHING_PURPLE_ROYAL">            <tattooWriting colour="CLOTHING_PURPLE_ROYAL" glow="true"><![CDATA[奶牛↑]]>                <styles>                    <style value="ITALICISED"/>                    <style value="BOLD"/>                </styles>            </tattooWriting>            <tattooCounter colour="CLOTHING_PURPLE_ROYAL" countType="NUMBERS" glow="true" type="OFFSPRING_BIRTHED"/>            <effects/>        </tattoo>    </tattooEntry>    <tattooEntry slot="HIPS">        <tattoo glowing="true" id="innoxia_plant_rose" name="玫瑰" primaryColour="CLOTHING_RED_VERY_DARK" secondaryColour="CLOTHING_RED_VERY_DARK">            <tattooWriting colour="CLOTHING_RED_VERY_DARK" glow="true"><![CDATA[骚骚屁屁！]]>                <styles>                    <style value="ITALICISED"/>                    <style value="BOLD"/>                </styles>            </tattooWriting>            <tattooCounter colour="CLOTHING_RED_VERY_DARK" countType="NUMBERS" glow="true" type="CUM_IN_ASS"/>            <effects/>        </tattoo>    </tattooEntry></tattoos>""")
+            node.find("character").append(new_tattoos)
+            edit_count += 1
+    print(f"Tattoos Setting {edit_count} Changed")
 
 if __name__ == "__main__":
 
@@ -227,6 +235,7 @@ if __name__ == "__main__":
     edit_slave_body_parts(npc_list)
     edit_pet_name(npc_list)
     edit_spell(npc_list)
+    edit_tattoo(npc_list)
 
     tree.write(xml_path, encoding="utf-8", xml_declaration=True)
     print("XML saved")

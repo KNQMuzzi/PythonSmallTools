@@ -137,7 +137,7 @@ if __name__ == "__main__":
     # xml_path = r"E:\@Joy\@Butter\@#Liliths Throne\data\saves\Test.xml"
     tree = ET.parse(xml_path)
     root = tree.getroot()
-    npc_list = root.findall("NPC")class
+    npc_list = root.findall("NPC")
 
     edit_milk_setting(npc_list)
     edit_slave_permission_settings(npc_list)

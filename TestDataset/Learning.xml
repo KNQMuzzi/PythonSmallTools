@@ -84,8 +84,24 @@
 				</bodyCore>
 				<breasts milkRegeneration="500000" milkStorage="10000" size="14" storedMilk="10000.0" />
 				<vagina capacity="0.0" clitGirth="3" clitSize="0" depth="7" eggLayer="true" elasticity="7" hymen="false" labiaSize="2" pierced="false" plasticity="0" squirter="true" stretchedCapacity="0.0" type="NoStepOnSnek_snake_vagina" urethraCapacity="0.0" urethraDepth="2" urethraElasticity="0" urethraPlasticity="3" urethraStretchedCapacity="0.0" urethraVirgin="true" virgin="false" wetness="7">
-					<mod>MUSCLE_CONTROL</mod><mod>PUFFY</mod><mod>RIBBED</mod><mod>TENTACLED</mod></vagina>
-			<anus assHair="ZERO_NONE" bleached="false" capacity="0.0" depth="7" elasticity="7" plasticity="0" stretchedCapacity="0.0" virgin="false" wetness="7"><mod>MUSCLE_CONTROL</mod><mod>PUFFY</mod><mod>RIBBED</mod><mod>TENTACLED</mod></anus><mouth capacity="0.0" depth="7" elasticity="7" lipSize="3" piercedLip="false" plasticity="0" stretchedCapacity="0.0" virgin="false" wetness="7"><mod>MUSCLE_CONTROL</mod><mod>PUFFY</mod><mod>RIBBED</mod><mod>TENTACLED</mod></mouth></body>
+					<mod>MUSCLE_CONTROL</mod>
+					<mod>PUFFY</mod>
+					<mod>RIBBED</mod>
+					<mod>TENTACLED</mod>
+				</vagina>
+				<anus assHair="ZERO_NONE" bleached="false" capacity="0.0" depth="7" elasticity="7" plasticity="0" stretchedCapacity="0.0" virgin="false" wetness="7">
+					<mod>MUSCLE_CONTROL</mod>
+					<mod>PUFFY</mod>
+					<mod>RIBBED</mod>
+					<mod>TENTACLED</mod>
+				</anus>
+				<mouth capacity="0.0" depth="7" elasticity="7" lipSize="3" piercedLip="false" plasticity="0" stretchedCapacity="0.0" virgin="false" wetness="7">
+					<mod>MUSCLE_CONTROL</mod>
+					<mod>PUFFY</mod>
+					<mod>RIBBED</mod>
+					<mod>TENTACLED</mod>
+				</mouth>
+			</body>
 			<characterRelationships>
 				<relationship character="PlayerCharacter" value="100.0" />
 			</characterRelationships>
@@ -127,7 +143,16 @@
 						</setting>
 					</jobSetting>
 					<jobSetting job="MILKING">
-						<setting>MILKING_MILK_CROTCH_AUTO_SELL</setting><setting>MILKING_MILK</setting><setting>MILKING_CUM_AUTO_SELL</setting><setting>MILKING_ARTISAN</setting><setting>MILKING_GIRLCUM_AUTO_SELL</setting><setting>MILKING_MILK_AUTO_SELL</setting><setting>MILKING_MILK_CROTCH</setting><setting>MILKING_CUM</setting><setting>MILKING_GIRLCUM</setting></jobSetting>
+						<setting>MILKING_MILK_CROTCH_AUTO_SELL</setting>
+						<setting>MILKING_MILK</setting>
+						<setting>MILKING_CUM_AUTO_SELL</setting>
+						<setting>MILKING_ARTISAN</setting>
+						<setting>MILKING_GIRLCUM_AUTO_SELL</setting>
+						<setting>MILKING_MILK_AUTO_SELL</setting>
+						<setting>MILKING_MILK_CROTCH</setting>
+						<setting>MILKING_CUM</setting>
+						<setting>MILKING_GIRLCUM</setting>
+					</jobSetting>
 					<jobSetting job="BEDROOM">
 						<setting>
 							BEDROOM_CLEAN
@@ -153,7 +178,40 @@
 				</slaveJobSettings>
 				<slaveAssignedJobs />
 				<value value="75000" />
-				<slavePermissionSettings>    <permission type="GENERAL">        <setting value="GENERAL_HOUSE_FREEDOM" />    </permission>    <permission type="EXERCISE">        <setting value="EXERCISE_NORMAL" />    </permission>    <permission type="PREGNANCY">        <setting value="PREGNANCY_ALLOW_EGG_LAYING" />        <setting value="PREGNANCY_ALLOW_BIRTHING" />    </permission>    <permission type="BEHAVIOUR">        <setting value="BEHAVIOUR_STANDARD" />    </permission>    <permission type="SEX">        <setting value="SEX_SAVE_VIRGINITY" />        <setting value="SEX_IMPREGNATED" />        <setting value="SEX_RECEIVE_SLAVES" />    </permission>    <permission type="CLEANLINESS">        <setting value="CLEANLINESS_WASH_CLOTHES" />        <setting value="CLEANLINESS_WASH_BODY" />    </permission>    <permission type="PILLS">        <setting value="PILLS_NO_PILLS" />    </permission>    <permission type="DIET">        <setting value="FOOD_NORMAL" />    </permission>    <permission type="SLEEPING">        <setting value="SLEEPING_DEFAULT" />    </permission></slavePermissionSettings></slavery>
+				<slavePermissionSettings>
+					<permission type="GENERAL">
+						<setting value="GENERAL_HOUSE_FREEDOM" />
+					</permission>
+					<permission type="EXERCISE">
+						<setting value="EXERCISE_NORMAL" />
+					</permission>
+					<permission type="PREGNANCY">
+						<setting value="PREGNANCY_ALLOW_EGG_LAYING" />
+						<setting value="PREGNANCY_ALLOW_BIRTHING" />
+					</permission>
+					<permission type="BEHAVIOUR">
+						<setting value="BEHAVIOUR_STANDARD" />
+					</permission>
+					<permission type="SEX">
+						<setting value="SEX_SAVE_VIRGINITY" />
+						<setting value="SEX_IMPREGNATED" />
+						<setting value="SEX_RECEIVE_SLAVES" />
+					</permission>
+					<permission type="CLEANLINESS">
+						<setting value="CLEANLINESS_WASH_CLOTHES" />
+						<setting value="CLEANLINESS_WASH_BODY" />
+					</permission>
+					<permission type="PILLS">
+						<setting value="PILLS_NO_PILLS" />
+					</permission>
+					<permission type="DIET">
+						<setting value="FOOD_NORMAL" />
+					</permission>
+					<permission type="SLEEPING">
+						<setting value="SLEEPING_DEFAULT" />
+					</permission>
+				</slavePermissionSettings>
+			</slavery>
 		</character>
 	</NPC>
 </data>
