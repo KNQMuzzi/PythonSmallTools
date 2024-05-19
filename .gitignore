@@ -1,5 +1,5 @@
-SteamValidatorID/
-RenameLog/
+@SteamValidatorID/
+@RenameLog/
 __pycache__/
 .idea/
 /.json

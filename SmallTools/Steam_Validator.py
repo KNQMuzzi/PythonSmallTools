@@ -38,7 +38,7 @@ def getSteamValidatorID(baseSTR):
     return code_dict
 
 if __name__ == '__main__':
-    save_path = os.path.join(os.getcwd(), "SteamValidatorID")
+    save_path = os.path.join(os.getcwd(), "@SteamValidatorID")
     if not os.path.exists(save_path):
         os.makedirs(save_path)
 
