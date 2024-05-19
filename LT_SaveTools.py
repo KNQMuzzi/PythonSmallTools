@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 ###---(oﾟvﾟ)ノ---###
-#Author Start
+# Author Start
 # hint Date: 2024-05-05 23:53:52
 # hint LastEditors: Jupiter.Q.Peng
 # hint LastEditTime: 2024-05-06 19:23:24
@@ -12,15 +12,20 @@ import xml.etree.ElementTree as ET
 
 # TODO 修改文件修改库，换成lxml库 https://www.cnblogs.com/iamdongyang/p/11765782.html
 
+
 # HINT 基础功能
-def create_node(tag, content, property_map={}):
+# HINT 创建节点
+def create_node(tag: str, content: str, property_map: dict = {}) -> ET.Element:
     element = ET.Element(tag, property_map)
     element.text = content
     return element
 
+# HINT 删除所有子节点
+def remove_subnode():
+    pass
 
 # HINT 存档相关：修改奶牛设置
-def edit_milk_setting(node_list):
+def edit_milk_setting(node_list: list) -> None:
     edit_count = 0
     for node in node_list:
         if node.find("character/slavery/owner").attrib["value"] == "PlayerCharacter":
@@ -30,9 +35,7 @@ def edit_milk_setting(node_list):
                 if sub_job.attrib["job"] == "MILKING":
                     for milk_item in sub_job.findall("setting"):
                         sub_job.remove(milk_item)
-                    sub_job.append(
-                        create_node("setting", "MILKING_MILK_CROTCH_AUTO_SELL")
-                    )
+                    sub_job.append(create_node("setting", "MILKING_MILK_CROTCH_AUTO_SELL"))
                     sub_job.append(create_node("setting", "MILKING_MILK"))
                     sub_job.append(create_node("setting", "MILKING_CUM_AUTO_SELL"))
                     sub_job.append(create_node("setting", "MILKING_ARTISAN"))
@@ -47,28 +50,33 @@ def edit_milk_setting(node_list):
 
 
 # HINT 存档相关：修改奴隶权限设置
-def edit_slave_permission_settings(node_list):
+def edit_slave_permission_settings(node_list: list) -> None:
     edit_count = 0
     for node in node_list:
         if node.find("character/slavery/owner").attrib["value"] == "PlayerCharacter":
             slavery = node.find("character/slavery")
             permission = node.find("character/slavery/slavePermissionSettings")
             slavery.remove(permission)
-            permissions = ET.fromstring("""<slavePermissionSettings>    <permission type="GENERAL">        <setting value="GENERAL_HOUSE_FREEDOM" />    </permission>    <permission type="EXERCISE">        <setting value="EXERCISE_NORMAL" />    </permission>    <permission type="PREGNANCY">        <setting value="PREGNANCY_ALLOW_EGG_LAYING" />        <setting value="PREGNANCY_ALLOW_BIRTHING" />    </permission>    <permission type="BEHAVIOUR">        <setting value="BEHAVIOUR_STANDARD" />    </permission>    <permission type="SEX">        <setting value="SEX_SAVE_VIRGINITY" />        <setting value="SEX_IMPREGNATED" />        <setting value="SEX_RECEIVE_SLAVES" />    </permission>    <permission type="CLEANLINESS">        <setting value="CLEANLINESS_WASH_CLOTHES" />        <setting value="CLEANLINESS_WASH_BODY" />    </permission>    <permission type="PILLS">        <setting value="PILLS_NO_PILLS" />    </permission>    <permission type="DIET">        <setting value="FOOD_NORMAL" />    </permission>    <permission type="SLEEPING">        <setting value="SLEEPING_DEFAULT" />    </permission></slavePermissionSettings>""")
+            permissions = ET.fromstring(
+                """<slavePermissionSettings>    <permission type="GENERAL">        <setting value="GENERAL_HOUSE_FREEDOM" />    </permission>    <permission type="EXERCISE">        <setting value="EXERCISE_NORMAL" />    </permission>    <permission type="PREGNANCY">        <setting value="PREGNANCY_ALLOW_EGG_LAYING" />        <setting value="PREGNANCY_ALLOW_BIRTHING" />    </permission>    <permission type="BEHAVIOUR">        <setting value="BEHAVIOUR_STANDARD" />    </permission>    <permission type="SEX">        <setting value="SEX_SAVE_VIRGINITY" />        <setting value="SEX_IMPREGNATED" />        <setting value="SEX_RECEIVE_SLAVES" />    </permission>    <permission type="CLEANLINESS">        <setting value="CLEANLINESS_WASH_CLOTHES" />        <setting value="CLEANLINESS_WASH_BODY" />    </permission>    <permission type="PILLS">        <setting value="PILLS_NO_PILLS" />    </permission>    <permission type="DIET">        <setting value="FOOD_NORMAL" />    </permission>    <permission type="SLEEPING">        <setting value="SLEEPING_DEFAULT" />    </permission></slavePermissionSettings>"""
+            )
             slavery.append(permissions)
             edit_count += 1
     print(f"Slave Permission Setting {edit_count} Changed")
 
+
 # HINT 修改奴隶的好感度与服从度
-def edit_slave_obedience_(node_list):
-    edit_count_o, edit_count_r, add_relation= 0, 0, 0
+def edit_slave_obedience_(node_list: list) -> None:
+    edit_count_o, edit_count_r, add_relation = 0, 0, 0
     for node in node_list:
         if node.find("character/slavery/owner").attrib["value"] == "PlayerCharacter":
 
             node.find("character/core/obedience").attrib["value"] = "100.0"
             edit_count_o += 1
 
-            relationships = node.findall("character/characterRelationships/relationship")
+            relationships = node.findall(
+                "character/characterRelationships/relationship"
+            )
             state_player = False
             for relationship in relationships:
                 if relationship.attrib["character"] == "PlayerCharacter":
@@ -78,15 +86,18 @@ def edit_slave_obedience_(node_list):
                     break
             if not state_player:
                 base_relation = node.find("character/characterRelationships")
-                player_relation = ET.fromstring("""<relationship character="PlayerCharacter" value="100.0" />""")
+                player_relation = ET.fromstring(
+                    """<relationship character="PlayerCharacter" value="100.0" />"""
+                )
                 base_relation.append(player_relation)
                 add_relation += 1
 
     print(f"Obedience Setting {edit_count_o} Changed")
     print(f"Relationships Setting {edit_count_r} Changed, {add_relation} Added")
 
+
 # HINT 修改奴隶的身体部位
-def edit_slave_body_parts(node_list):
+def edit_slave_body_parts(node_list: list) -> None:
     edit_count = 0
     for node in node_list:
         if node.find("character/slavery/owner").attrib["value"] == "PlayerCharacter":
@@ -96,7 +107,9 @@ def edit_slave_body_parts(node_list):
             body_part = node.find("character/body")
             # Anus Part
             body_part.remove(body_part.find("anus"))
-            anus_node = ET.fromstring("""<anus assHair="ZERO_NONE" bleached="false" capacity="0.0" depth="7" elasticity="7" plasticity="0" stretchedCapacity="0.0" virgin="false" wetness="7"><mod>MUSCLE_CONTROL</mod><mod>PUFFY</mod><mod>RIBBED</mod><mod>TENTACLED</mod></anus>""")
+            anus_node = ET.fromstring(
+                """<anus assHair="ZERO_NONE" bleached="false" capacity="0.0" depth="7" elasticity="7" plasticity="0" stretchedCapacity="0.0" virgin="false" wetness="7"><mod>MUSCLE_CONTROL</mod><mod>PUFFY</mod><mod>RIBBED</mod><mod>TENTACLED</mod></anus>"""
+            )
             body_part.append(anus_node)
             # Breasts Part <breasts milkRegeneration="500000" milkStorage="10000" size="14" storedMilk="10000.0" />
             node.find("character/body/breasts").attrib["milkRegeneration"] = "500000"
@@ -107,7 +120,9 @@ def edit_slave_body_parts(node_list):
             node.find("character/body/breastsCrotch").attrib["storedMilk"] = "10000.0"
             # Mouth Part
             body_part.remove(body_part.find("mouth"))
-            mouth_node = ET.fromstring("""<mouth capacity="0.0" depth="7" elasticity="7" lipSize="3" piercedLip="false" plasticity="0" stretchedCapacity="0.0" virgin="false" wetness="7"><mod>MUSCLE_CONTROL</mod><mod>PUFFY</mod><mod>RIBBED</mod><mod>TENTACLED</mod></mouth>""")
+            mouth_node = ET.fromstring(
+                """<mouth capacity="0.0" depth="7" elasticity="7" lipSize="3" piercedLip="false" plasticity="0" stretchedCapacity="0.0" virgin="false" wetness="7"><mod>MUSCLE_CONTROL</mod><mod>PUFFY</mod><mod>RIBBED</mod><mod>TENTACLED</mod></mouth>"""
+            )
             body_part.append(mouth_node)
             # penis Part
             node.find("character/body/penis").attrib["type"] = "NONE"
@@ -121,7 +136,7 @@ def edit_slave_body_parts(node_list):
             node.find("character/body/vagina").attrib["stretchedCapacity"] = "0.0"
             node.find("character/body/vagina").attrib["squirter"] = "true"
             vagina_mod_list = node.findall("character/body/vagina/mod")
-            if len(vagina_mod_list)>0:
+            if len(vagina_mod_list) > 0:
                 for v_mod in vagina_mod_list:
                     node.find("character/body/vagina").remove(v_mod)
             vagina_part = node.find("character/body/vagina")
@@ -168,19 +183,27 @@ def edit_slave_body_parts(node_list):
             edit_count += 1
     print(f"Body Setting {edit_count} Changed")
 
+
 # HINT 更改称谓 <fatherName value="乔茜"/>  <petNames><petNameEntry id="PlayerCharacter" petName="妈妈主人"/></petNames>
-def edit_pet_name(node_list):
+def edit_pet_name(node_list: list) -> None:
     edit_count = 0
     for node in node_list:
         if node.find("character/slavery/owner").attrib["value"] == "PlayerCharacter":
-            if node.find("character/family/fatherId").attrib["value"] == "PlayerCharacter":
-                for petNameEntry in node.findall("character/core/petNames/petNameEntry"):
+            if (
+                node.find("character/family/fatherId").attrib["value"]
+                == "PlayerCharacter"
+            ):
+                for petNameEntry in node.findall(
+                    "character/core/petNames/petNameEntry"
+                ):
                     if petNameEntry.attrib["id"] == "PlayerCharacter":
                         petNameEntry.attrib["petName"] = "妈妈"
                         edit_count += 1
                         break
             else:
-                for petNameEntry in node.findall("character/core/petNames/petNameEntry"):
+                for petNameEntry in node.findall(
+                    "character/core/petNames/petNameEntry"
+                ):
                     if petNameEntry.attrib["id"] == "PlayerCharacter":
                         petNameEntry.attrib["petName"] = "主人"
                         edit_count += 1
@@ -188,8 +211,9 @@ def edit_pet_name(node_list):
 
     print(f"Pet Name Setting {edit_count} Changed")
 
+
 # HINT 变更法术
-def edit_spell(node_list):
+def edit_spell(node_list: list) -> None:
     edit_count = 0
     for node in node_list:
         if node.find("character/slavery/owner").attrib["value"] == "PlayerCharacter":
@@ -197,29 +221,37 @@ def edit_spell(node_list):
             if knownSpells is not None:
                 node.find("character").remove(knownSpells)
 
-            new_spells = ET.fromstring("""<knownSpells>    <spell type="ARCANE_AROUSAL"/>    <spell type="TELEPATHIC_COMMUNICATION"/>    <spell type="FIREBALL"/>    <spell type="ARCANE_CLOUD"/>    <spell type="FLASH"/>    <spell type="SOOTHING_WATERS"/>    <spell type="ELEMENTAL_ARCANE"/>    <spell type="CLOAK_OF_FLAMES"/>    <spell type="STONE_SHELL"/>    <spell type="ELEMENTAL_EARTH"/>    <spell type="TELEKENETIC_SHOWER"/>    <spell type="ELEMENTAL_FIRE"/></knownSpells>""")
+            new_spells = ET.fromstring(
+                """<knownSpells>    <spell type="ARCANE_AROUSAL"/>    <spell type="TELEPATHIC_COMMUNICATION"/>    <spell type="FIREBALL"/>    <spell type="ARCANE_CLOUD"/>    <spell type="FLASH"/>    <spell type="SOOTHING_WATERS"/>    <spell type="ELEMENTAL_ARCANE"/>    <spell type="CLOAK_OF_FLAMES"/>    <spell type="STONE_SHELL"/>    <spell type="ELEMENTAL_EARTH"/>    <spell type="TELEKENETIC_SHOWER"/>    <spell type="ELEMENTAL_FIRE"/></knownSpells>"""
+            )
             node.find("character").append(new_spells)
 
             spellUpgrades = node.find("character/spellUpgrades")
             if spellUpgrades is not None:
                 node.find("character").remove(spellUpgrades)
-            new_SU = ET.fromstring("""<spellUpgrades>    <upgrade type="FIREBALL_1"/>    <upgrade type="FIREBALL_2"/>    <upgrade type="FIREBALL_3"/>    <upgrade type="FLASH_1"/>    <upgrade type="FLASH_2"/>    <upgrade type="FLASH_3"/>    <upgrade type="CLOAK_OF_FLAMES_1"/>    <upgrade type="CLOAK_OF_FLAMES_2"/>    <upgrade type="CLOAK_OF_FLAMES_3"/>    <upgrade type="ELEMENTAL_FIRE_1"/>    <upgrade type="ELEMENTAL_FIRE_2"/>    <upgrade type="ELEMENTAL_FIRE_3B"/>    <upgrade type="SOOTHING_WATERS_1_CLEAN"/>    <upgrade type="SOOTHING_WATERS_2_CLEAN"/>    <upgrade type="SOOTHING_WATERS_1"/>    <upgrade type="SOOTHING_WATERS_2"/>    <upgrade type="SOOTHING_WATERS_3"/>    <upgrade type="TELEKENETIC_SHOWER_1"/>    <upgrade type="TELEKENETIC_SHOWER_2"/>    <upgrade type="TELEKENETIC_SHOWER_3"/>    <upgrade type="STONE_SHELL_1"/>    <upgrade type="STONE_SHELL_2"/>    <upgrade type="STONE_SHELL_3"/>    <upgrade type="ELEMENTAL_EARTH_1"/>    <upgrade type="ELEMENTAL_EARTH_2"/>    <upgrade type="ELEMENTAL_EARTH_3B"/>    <upgrade type="ARCANE_AROUSAL_1"/>    <upgrade type="ARCANE_AROUSAL_2"/>    <upgrade type="ARCANE_AROUSAL_3"/>    <upgrade type="TELEPATHIC_COMMUNICATION_1"/>    <upgrade type="TELEPATHIC_COMMUNICATION_2"/>    <upgrade type="TELEPATHIC_COMMUNICATION_3"/>    <upgrade type="ARCANE_CLOUD_1"/>    <upgrade type="ARCANE_CLOUD_2"/>    <upgrade type="ARCANE_CLOUD_3"/>    <upgrade type="ELEMENTAL_ARCANE_1"/>    <upgrade type="ELEMENTAL_ARCANE_2"/>    <upgrade type="ELEMENTAL_ARCANE_3B"/></spellUpgrades>""")
+            new_SU = ET.fromstring(
+                """<spellUpgrades>    <upgrade type="FIREBALL_1"/>    <upgrade type="FIREBALL_2"/>    <upgrade type="FIREBALL_3"/>    <upgrade type="FLASH_1"/>    <upgrade type="FLASH_2"/>    <upgrade type="FLASH_3"/>    <upgrade type="CLOAK_OF_FLAMES_1"/>    <upgrade type="CLOAK_OF_FLAMES_2"/>    <upgrade type="CLOAK_OF_FLAMES_3"/>    <upgrade type="ELEMENTAL_FIRE_1"/>    <upgrade type="ELEMENTAL_FIRE_2"/>    <upgrade type="ELEMENTAL_FIRE_3B"/>    <upgrade type="SOOTHING_WATERS_1_CLEAN"/>    <upgrade type="SOOTHING_WATERS_2_CLEAN"/>    <upgrade type="SOOTHING_WATERS_1"/>    <upgrade type="SOOTHING_WATERS_2"/>    <upgrade type="SOOTHING_WATERS_3"/>    <upgrade type="TELEKENETIC_SHOWER_1"/>    <upgrade type="TELEKENETIC_SHOWER_2"/>    <upgrade type="TELEKENETIC_SHOWER_3"/>    <upgrade type="STONE_SHELL_1"/>    <upgrade type="STONE_SHELL_2"/>    <upgrade type="STONE_SHELL_3"/>    <upgrade type="ELEMENTAL_EARTH_1"/>    <upgrade type="ELEMENTAL_EARTH_2"/>    <upgrade type="ELEMENTAL_EARTH_3B"/>    <upgrade type="ARCANE_AROUSAL_1"/>    <upgrade type="ARCANE_AROUSAL_2"/>    <upgrade type="ARCANE_AROUSAL_3"/>    <upgrade type="TELEPATHIC_COMMUNICATION_1"/>    <upgrade type="TELEPATHIC_COMMUNICATION_2"/>    <upgrade type="TELEPATHIC_COMMUNICATION_3"/>    <upgrade type="ARCANE_CLOUD_1"/>    <upgrade type="ARCANE_CLOUD_2"/>    <upgrade type="ARCANE_CLOUD_3"/>    <upgrade type="ELEMENTAL_ARCANE_1"/>    <upgrade type="ELEMENTAL_ARCANE_2"/>    <upgrade type="ELEMENTAL_ARCANE_3B"/></spellUpgrades>"""
+            )
             node.find("character").append(new_SU)
             edit_count += 1
     print(f"Spell Setting {edit_count} Changed")
 
+
 # HINT 刺青编辑
-def edit_tattoo(node_list):
+def edit_tattoo(node_list: list) -> None:
     edit_count = 0
     for node in node_list:
         if node.find("character/slavery/owner").attrib["value"] == "PlayerCharacter":
             tattoos = node.find("character/tattoos")
             if tattoos is not None:
                 node.find("character").remove(tattoos)
-            new_tattoos = ET.fromstring("""<tattoos>    <tattooEntry slot="ANUS">        <tattoo glowing="true" id="innoxia_hearts_hearts" name="心形" primaryColour="CLOTHING_PINK_HOT" secondaryColour="CLOTHING_PINK_HOT">            <tattooWriting colour="CLOTHING_PINK_HOT" glow="true"><![CDATA[内射我吧！]]>                <styles>                    <style value="ITALICISED"/>                    <style value="BOLD"/>                </styles>            </tattooWriting>            <tattooCounter colour="CLOTHING_PINK_HOT" countType="NUMBERS" glow="true" type="CUM_TAKEN"/>            <effects/>        </tattoo>    </tattooEntry>    <tattooEntry slot="GROIN">        <tattoo glowing="true" id="innoxia_heartWomb_heart_womb" name="胎胞爱心" primaryColour="CLOTHING_PINK_HOT" secondaryColour="CLOTHING_PINK" tertiaryColour="CLOTHING_PINK_HOT">            <tattooWriting colour="CLOTHING_PINK" glow="true"><![CDATA[精液厕所]]>                <styles>                    <style value="ITALICISED"/>                    <style value="BOLD"/>                </styles>            </tattooWriting>            <tattooCounter colour="CLOTHING_PINK" countType="NUMBERS" glow="true" type="CUM_IN_VAGINA"/>            <effects/>        </tattoo>    </tattooEntry>    <tattooEntry slot="CHEST">        <tattoo glowing="true" id="innoxia_animal_butterflies" name="蝴蝶" primaryColour="CLOTHING_PINK_HOT" secondaryColour="CLOTHING_PINK_HOT" tertiaryColour="CLOTHING_PINK_HOT">            <tattooWriting colour="CLOTHING_PINK_HOT" glow="true"><![CDATA[奶牛↑]]>                <styles>                    <style value="ITALICISED"/>                    <style value="BOLD"/>                </styles>            </tattooWriting>            <tattooCounter colour="CLOTHING_PINK_HOT" countType="NUMBERS" glow="true" type="OFFSPRING_BIRTHED"/>            <effects/>        </tattoo>    </tattooEntry>    <tattooEntry slot="HIPS">        <tattoo glowing="true" id="innoxia_plant_rose" name="玫瑰" primaryColour="CLOTHING_PINK" secondaryColour="CLOTHING_PINK_HOT">            <tattooWriting colour="CLOTHING_PINK_HOT" glow="true"><![CDATA[骚骚屁屁！]]>                <styles>                    <style value="ITALICISED"/>                    <style value="BOLD"/>                </styles>            </tattooWriting>            <tattooCounter colour="CLOTHING_PINK_HOT" countType="NUMBERS" glow="true" type="CUM_IN_ASS"/>            <effects/>        </tattoo>    </tattooEntry></tattoos>""")
+            new_tattoos = ET.fromstring(
+                """<tattoos>    <tattooEntry slot="ANUS">        <tattoo glowing="true" id="innoxia_hearts_hearts" name="心形" primaryColour="CLOTHING_PINK_HOT" secondaryColour="CLOTHING_PINK_HOT">            <tattooWriting colour="CLOTHING_PINK_HOT" glow="true"><![CDATA[内射我吧！]]>                <styles>                    <style value="ITALICISED"/>                    <style value="BOLD"/>                </styles>            </tattooWriting>            <tattooCounter colour="CLOTHING_PINK_HOT" countType="NUMBERS" glow="true" type="CUM_TAKEN"/>            <effects/>        </tattoo>    </tattooEntry>    <tattooEntry slot="GROIN">        <tattoo glowing="true" id="innoxia_heartWomb_heart_womb" name="胎胞爱心" primaryColour="CLOTHING_PINK_HOT" secondaryColour="CLOTHING_PINK" tertiaryColour="CLOTHING_PINK_HOT">            <tattooWriting colour="CLOTHING_PINK" glow="true"><![CDATA[精液厕所]]>                <styles>                    <style value="ITALICISED"/>                    <style value="BOLD"/>                </styles>            </tattooWriting>            <tattooCounter colour="CLOTHING_PINK" countType="NUMBERS" glow="true" type="CUM_IN_VAGINA"/>            <effects/>        </tattoo>    </tattooEntry>    <tattooEntry slot="CHEST">        <tattoo glowing="true" id="innoxia_animal_butterflies" name="蝴蝶" primaryColour="CLOTHING_PINK_HOT" secondaryColour="CLOTHING_PINK_HOT" tertiaryColour="CLOTHING_PINK_HOT">            <tattooWriting colour="CLOTHING_PINK_HOT" glow="true"><![CDATA[奶牛↑]]>                <styles>                    <style value="ITALICISED"/>                    <style value="BOLD"/>                </styles>            </tattooWriting>            <tattooCounter colour="CLOTHING_PINK_HOT" countType="NUMBERS" glow="true" type="OFFSPRING_BIRTHED"/>            <effects/>        </tattoo>    </tattooEntry>    <tattooEntry slot="HIPS">        <tattoo glowing="true" id="innoxia_plant_rose" name="玫瑰" primaryColour="CLOTHING_PINK" secondaryColour="CLOTHING_PINK_HOT">            <tattooWriting colour="CLOTHING_PINK_HOT" glow="true"><![CDATA[骚骚屁屁！]]>                <styles>                    <style value="ITALICISED"/>                    <style value="BOLD"/>                </styles>            </tattooWriting>            <tattooCounter colour="CLOTHING_PINK_HOT" countType="NUMBERS" glow="true" type="CUM_IN_ASS"/>            <effects/>        </tattoo>    </tattooEntry></tattoos>"""
+            )
             node.find("character").append(new_tattoos)
             edit_count += 1
     print(f"Tattoos Setting {edit_count} Changed")
+
 
 if __name__ == "__main__":
 
