@@ -77,8 +77,7 @@ class rename_tools:
             r"./RenameLog", f"Renamelog-{datetime.datetime.today().strftime('%Y-%m-%d')}").MakeLogging()
         self.picFile = ["jpg", "png", "jpeg", "bmp", "gif", "webp", "psd", "svg", "tiff",
                         "tif", "raw", "heif", "indd", "jp2", "jxr", "hdp", "wdp", "bpg", "ico", "cur"]
-        self.vedioFile = ["mp4", "avi", "mov", "wmv",
-                          "flv", "f4v", "f4p", "f4a", "f4b", "rmvb"]
+        self.vedioFile = ["mp4", "avi", "mov", "wmv", "flv", "f4v", "f4p", "f4a", "f4b", "rmvb"]
         self.tools = tools()
 
     # RE 重命名文件夹，增加元信息
