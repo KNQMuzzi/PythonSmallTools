@@ -256,7 +256,7 @@ def edit_tattoo(node_list: list) -> None:
 if __name__ == "__main__":
 
     # xml_path = r"./TestDataset/Learning.xml"
-    xml_path = r"E:\@Joy\@Butter\@#Liliths Throne\data\saves\AutoSave_乔茜.xml"
+    xml_path = r"E:\@Joy\@Butter\@ Liliths Throne\data\saves\AutoSave_乔茜.xml"
     # xml_path = r"E:\@Joy\@Butter\@#Liliths Throne\data\saves\Test.xml"
     tree = ET.parse(xml_path)
     root = tree.getroot()

@@ -55,14 +55,14 @@ def rename_wallhaven(path):
     with Progress(TextColumn("[progress.description]{task.description}"),
                  BarColumn(),
                  TextColumn("[progress.percentage]{task.percentage:>3.0f}%")) as progress:
-        files = os.listdir(path)
+        files = get_all_file(path)
         batch = progress.add_task(description = "改名进度", total = len(files))
-
-        pass
         for file in files:
-            if 'wallhaven' in file:
-                new_name = file.replace('wallhaven-', '')
-                os.rename(os.path.join(path, file), os.path.join(path, new_name))
+            if '@WallPaperAlpha' not in file:
+                pic_path = os.path.join(path, file)
+                pic_time = get_picTime(pic_path)
+                new_name = f'@WallPaperAlpha_{pic_time[0]}_{file}'
+                os.rename(pic_path, os.path.join(path, new_name))
             progress.advance(batch, advance=1)
         print(f'{len(files)} 改名完成！')
 
@@ -77,4 +77,4 @@ if __name__ == '__main__':
     # rename_dir_typeA(path, patten, repl)
     # print(get_picTime('E:\@Pic\α\wallhaven-1pevqg.jpg'))
 
-    print(get_all_dir(path))
+    rename_wallhaven(path)
